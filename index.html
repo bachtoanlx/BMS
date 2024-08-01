@@ -72,7 +72,17 @@
             
             const paramsA4C4 = {
                 spreadsheetId: '1wKxC41YBHsMv0O4PEOQIo3-pGBkQv1oOMM8ZIIfubLo',
-                range: 'Update!A4:C4', // Chỉ định phạm vi bao gồm A7, B7 và C7
+                range: 'Update!A4:C4', // Chỉ định phạm vi bao gồm A4, B4 và C4
+            };
+
+            const paramsA7C7 = {
+                spreadsheetId: '1wKxC41YBHsMv0O4PEOQIo3-pGBkQv1oOMM8ZIIfubLo',
+                range: 'Update!A7:C7', // Chỉ định phạm vi bao gồm A7, B7 và C7
+            };
+
+            const paramsA8 = {
+                spreadsheetId: '1wKxC41YBHsMv0O4PEOQIo3-pGBkQv1oOMM8ZIIfubLo',
+                range: 'Update!A8', // Chỉ định phạm vi bao gồm A8
             };
     
             // Lấy dữ liệu từ ô A2
@@ -83,12 +93,30 @@
                 console.error('Error: ' + reason.result.error.message);
             });
     
-            // Lấy dữ liệu từ các ô A7, B7 và C7
+            // Lấy dữ liệu từ các ô A4, B4 và C4
             gapi.client.sheets.spreadsheets.values.get(paramsA4C4).then((response) => {
                 const values = response.result.values[0];
                 document.getElementById('cellA4').innerText = values[0];
                 document.getElementById('cellB4').innerText = values[1];
                 document.getElementById('cellC4').innerText = values[2];
+            }, (reason) => {
+                console.error('Error: ' + reason.result.error.message);
+            });
+
+            // Lấy dữ liệu từ các ô A7, B7 và C7
+            gapi.client.sheets.spreadsheets.values.get(paramsA7C7).then((response) => {
+                const values = response.result.values[0];
+                document.getElementById('cellA7').innerText = values[0];
+                document.getElementById('cellB7').innerText = values[1];
+                document.getElementById('cellC7').innerText = values[2];
+            }, (reason) => {
+                console.error('Error: ' + reason.result.error.message);
+            });
+
+            // Lấy dữ liệu từ ô A8
+            gapi.client.sheets.spreadsheets.values.get(paramsA8).then((response) => {
+                const value = response.result.values[0][0];
+                document.getElementById('cellA8').innerText = value;
             }, (reason) => {
                 console.error('Error: ' + reason.result.error.message);
             });
@@ -125,6 +153,14 @@
                     <td id="cellA4" style="min-width: 100px;">Loading...</td>
                     <td id="cellB4" style="min-width: 100px;">Loading...</td>
                     <td id="cellC4" style="min-width: 100px;">Loading...</td>
+                </tr>
+                <tr>
+                    <td id="cellA7" style="min-width: 100px;">Loading...</td>
+                    <td id="cellB7" style="min-width: 100px;">Loading...</td>
+                    <td id="cellC7" style="min-width: 100px;">Loading...</td>
+                </tr>
+                <tr>
+                    <th colspan="3" id="cellA8">Loading...</th>
                 </tr>
             </tbody>
         </table>
