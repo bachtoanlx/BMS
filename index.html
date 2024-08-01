@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Read Google Sheet</title>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.pexels.com/photos/8853537/pexels-photo-8853537.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center fixed; /* Thay thế 'your-image-url.jpg' bằng URL của ảnh nền */
+            background-size: cover;
+            filter: blur(3px); /* Làm mờ ảnh nền */
+            z-index: -1; /* Đặt ảnh nền ở phía sau nội dung */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 70%;
+            z-index: 1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            opacity: 0.9; /* Đặt độ mờ cho bảng */
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        th, td {
+            width: 33%; /* Đặt chiều rộng cho các cột */
+        }
+    </style>
+    <script>
+        function initClient() {
+            gapi.client.init({
+                'apiKey': 'AIzaSyANdbEb_R9E-tXldeDDoMTRfFX54NECou4',
+                'discoveryDocs': ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+            }).then(function() {
+                readCells();
+            });
+        }
+    
+        function handleClientLoad() {
+            gapi.load('client', initClient);
+        }
+    
+        function readCells() {
+            const paramsA2 = {
+                spreadsheetId: '1wKxC41YBHsMv0O4PEOQIo3-pGBkQv1oOMM8ZIIfubLo',
+                range: 'Update!A2', // Chỉ định phạm vi bao gồm A2
+            };
+            
+            const paramsA4C4 = {
+                spreadsheetId: '1wKxC41YBHsMv0O4PEOQIo3-pGBkQv1oOMM8ZIIfubLo',
+                range: 'Update!A4:C4', // Chỉ định phạm vi bao gồm A7, B7 và C7
+            };
+    
+            // Lấy dữ liệu từ ô A2
+            gapi.client.sheets.spreadsheets.values.get(paramsA2).then((response) => {
+                const value = response.result.values[0][0];
+                document.getElementById('cellA2').innerText = value;
+            }, (reason) => {
+                console.error('Error: ' + reason.result.error.message);
+            });
+    
+            // Lấy dữ liệu từ các ô A7, B7 và C7
+            gapi.client.sheets.spreadsheets.values.get(paramsA4C4).then((response) => {
+                const values = response.result.values[0];
+                document.getElementById('cellA4').innerText = values[0];
+                document.getElementById('cellB4').innerText = values[1];
+                document.getElementById('cellC4').innerText = values[2];
+            }, (reason) => {
+                console.error('Error: ' + reason.result.error.message);
+            });
+        }
+    
+        // Hàm reload trang mỗi 15 giây
+        function reloadPage() {
+            setInterval(function() {
+                location.reload();
+            }, 15000); // 15000 milliseconds = 15 seconds
+        }
+    </script>
+    
+</head>
+<body onload="handleClientLoad(); reloadPage();">
+    <div class="background"></div>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">BMS</th>
+                </tr>
+                <tr>
+                    <th colspan="3" id="cellA2">Loading...</th>
+                </tr>
+                <tr>
+                    <th>B1</th>
+                    <th>B2</th>
+                    <th>B3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="cellA4" style="min-width: 100px;">Loading...</td>
+                    <td id="cellB4" style="min-width: 100px;">Loading...</td>
+                    <td id="cellC4" style="min-width: 100px;">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
